@@ -14,6 +14,7 @@ export const siteProfile = {
   availability: "Public routes active; archives expanding channel by channel",
   locationLabel: "Asia/Shanghai",
   role: "Large-model / multimodal algorithm engineer",
+  motto: "Larger than life",
 };
 
 export const aboutProfile = {
@@ -172,14 +173,14 @@ export const highlights = [
     title: "NiniWithYuan is part of the game shelf",
     body:
       "The game channel is structured as a catalog, so NiniWithYuan is the first entry instead of a one-off navigation exception.",
-    path: "/channels/game/",
+    path: "https://game.whynotsleep.cc/",
   },
   {
     label: "Project route",
     title: "Engineering demos over vague portfolios",
     body:
       "Project cards will favor constraints, implementation choices, screenshots, and links over decorative self-description.",
-    path: "/channels/project/",
+    path: "https://project.whynotsleep.cc/",
   },
 ];
 
@@ -234,4 +235,26 @@ export const contacts = [
     label: "Telegram",
     href: siteProfile.telegramUrl,
   },
+];
+
+export const searchEntries = [
+  {
+    title: "About Winston",
+    category: "Profile",
+    url: "/about/",
+    text:
+      "large-model multimodal algorithm engineer LLM MM post-training agentic RL generative search ads recommendation",
+  },
+  ...channels.map((channel) => ({
+    title: channel.title,
+    category: "Channel",
+    url: `https://${channel.host}/`,
+    text: [channel.slug, channel.signal, channel.summary, ...channel.planned].join(" "),
+  })),
+  ...games.map((game) => ({
+    title: game.title,
+    category: "Game",
+    url: game.path,
+    text: [game.subtitle, game.summary, ...game.details, ...game.tags].join(" "),
+  })),
 ];

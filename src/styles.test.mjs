@@ -17,6 +17,7 @@ test("styles implement the site visual token contract", async () => {
     "--border-soft: #e5e3d8",
     "--signal: #2F6F5E",
     "--copper: #8E513A",
+    "--hand:",
   ];
 
   for (const token of requiredTokens) {
@@ -37,6 +38,11 @@ test("styles include responsive, focus, and paper texture rules", async () => {
   assert.match(css, /@media\s*\(min-width:\s*1180px\)/);
   assert.match(css, /:focus-visible/);
   assert.match(css, /\.brand-mark-icon/);
+  assert.match(css, /\.theme-toggle/);
+  assert.match(css, /html\[data-theme="night"\]/);
+  assert.match(css, /\.search-band/);
+  assert.match(css, /\.motto/);
+  assert.match(css, /\.copyright-icon/);
   assert.match(css, /\.game-grid/);
   assert.match(css, /\.contact-link/);
   assert.match(css, /paper-grain\.png/);

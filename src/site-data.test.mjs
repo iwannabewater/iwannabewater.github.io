@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { aboutProfile, channels, contacts, games, siteProfile } from "./site-data.mjs";
+import { aboutProfile, channels, contacts, games, searchEntries, siteProfile } from "./site-data.mjs";
 
 test("site profile exposes the approved identity and domain", () => {
   assert.equal(siteProfile.name, "Winston");
@@ -9,6 +9,7 @@ test("site profile exposes the approved identity and domain", () => {
   assert.equal(siteProfile.githubUser, "iwannabewater");
   assert.equal(siteProfile.email, "iwannabewater@gmail.com");
   assert.match(siteProfile.role, /multimodal algorithm engineer/i);
+  assert.equal(siteProfile.motto, "Larger than life");
 });
 
 test("channels contain exactly the seven approved launch slugs", () => {
@@ -56,4 +57,10 @@ test("contacts expose the public footer destinations", () => {
   assert.equal(contacts.find((contact) => contact.id === "email").href, "mailto:iwannabewater@gmail.com");
   assert.equal(contacts.find((contact) => contact.id === "x").href, "https://x.com/lilmochimo01");
   assert.equal(contacts.find((contact) => contact.id === "telegram").href, "https://t.me/lilmochimo");
+});
+
+test("search entries cover profile, channel subdomains, and playable games", () => {
+  assert.ok(searchEntries.some((entry) => entry.url === "/about/"));
+  assert.ok(searchEntries.some((entry) => entry.url === "https://game.whynotsleep.cc/"));
+  assert.ok(searchEntries.some((entry) => entry.url === "/NiniWithYuan/"));
 });

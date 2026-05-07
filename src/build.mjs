@@ -7,6 +7,7 @@ import {
   contacts,
   games,
   highlights,
+  searchEntries,
   signals,
   siteProfile,
 } from "./site-data.mjs";
@@ -31,7 +32,10 @@ Sitemap: https://${siteProfile.domain}/sitemap.xml
 
 function renderSitemapXml(paths) {
   const urls = paths
-    .map((path) => `  <url><loc>https://${siteProfile.domain}${path}</loc></url>`)
+    .map((path) => {
+      const loc = path.startsWith("https://") ? path : `https://${siteProfile.domain}${path}`;
+      return `  <url><loc>${loc}</loc></url>`;
+    })
     .join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -46,12 +50,13 @@ export async function buildSite({ outDir = join(projectRoot, "dist") } = {}) {
   await mkdir(join(outDir, "assets"), { recursive: true });
 
   await copyFile(join(projectRoot, "src", "styles.css"), join(outDir, "styles.css"));
+  await copyFile(join(projectRoot, "src", "site.js"), join(outDir, "site.js"));
   await writeFile(join(outDir, "assets", "paper-grain.png"), createPaperGrainPng());
   await writeFile(join(outDir, "CNAME"), `${siteProfile.domain}\n`, "utf8");
 
   await writePage(
     join(outDir, "index.html"),
-    renderHomePage({ siteProfile, channels, highlights, signals, aboutProfile, contacts }),
+    renderHomePage({ siteProfile, channels, highlights, signals, aboutProfile, contacts, searchEntries }),
   );
 
   await writePage(
@@ -70,7 +75,12 @@ export async function buildSite({ outDir = join(projectRoot, "dist") } = {}) {
   await writeFile(join(outDir, "robots.txt"), renderRobotsTxt(), "utf8");
   await writeFile(
     join(outDir, "sitemap.xml"),
-    renderSitemapXml(["/", "/about/", ...channels.map((channel) => channel.path), ...games.map((game) => game.path)]),
+    renderSitemapXml([
+      "/",
+      "/about/",
+      ...channels.map((channel) => `https://${channel.host}/`),
+      ...games.map((game) => game.path),
+    ]),
     "utf8",
   );
 }

@@ -16,6 +16,7 @@ test("buildSite writes the full static output tree", async () => {
   assert.equal((await readFile(join(outDir, "CNAME"), "utf8")).trim(), "whynotsleep.cc");
   assert.match(await readFile(join(outDir, "robots.txt"), "utf8"), /Sitemap: https:\/\/whynotsleep\.cc\/sitemap\.xml/);
   assert.match(await readFile(join(outDir, "sitemap.xml"), "utf8"), /https:\/\/whynotsleep\.cc\/NiniWithYuan\//);
+  assert.match(await readFile(join(outDir, "sitemap.xml"), "utf8"), /https:\/\/game\.whynotsleep\.cc\//);
 
   for (const channel of channels) {
     const html = await readFile(join(outDir, "channels", channel.slug, "index.html"), "utf8");
@@ -24,5 +25,6 @@ test("buildSite writes the full static output tree", async () => {
   }
 
   assert.ok((await stat(join(outDir, "styles.css"))).size > 100);
+  assert.ok((await stat(join(outDir, "site.js"))).size > 100);
   assert.ok((await stat(join(outDir, "assets", "paper-grain.png"))).size > 100);
 });

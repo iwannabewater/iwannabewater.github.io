@@ -22,10 +22,12 @@ npm run preview -- --port 4173
 ```text
 src/site-data.mjs       public profile, contacts, channels, games, highlights
 src/render.mjs          HTML renderers for home, about, channel, and 404 pages
+src/site.js             reading-mode toggle and static client-side search
 src/texture.mjs         deterministic local PNG paper texture generator
 src/build.mjs           static build pipeline, CNAME, robots.txt, sitemap.xml
 src/styles.css          visual system and responsive layout rules
 tests/ui/               Playwright smoke checks for desktop and mobile rendering
+cloudflare/             optional Worker router for channel subdomains
 dist/                   generated site, not committed
 ```
 
@@ -37,16 +39,18 @@ Local planning files, assistant workspaces, scratch output, test output, and gen
 |---|---|
 | `/` | Primary index and channel map |
 | `/about/` | Research and engineering profile |
-| `/channels/blog/` | Long-form technical essays and engineering narratives |
-| `/channels/game/` | Playable browser game catalog |
-| `/channels/project/` | Engineering projects, demos, tools, and repositories |
-| `/channels/manuscript/` | Reports, PDFs, white papers, and polished deep dives |
-| `/channels/design/` | Visual systems, UI explorations, and design studies |
-| `/channels/note/` | Short references, reading notes, commands, and bookmarks |
-| `/channels/life/` | Personal living records, photos, travel, and slower logs |
+| `https://blog.whynotsleep.cc/` | Long-form technical essays and engineering narratives |
+| `https://game.whynotsleep.cc/` | Playable browser game catalog |
+| `https://project.whynotsleep.cc/` | Engineering projects, demos, tools, and repositories |
+| `https://manuscript.whynotsleep.cc/` | Reports, PDFs, white papers, and polished deep dives |
+| `https://design.whynotsleep.cc/` | Visual systems, UI explorations, and design studies |
+| `https://note.whynotsleep.cc/` | Short references, reading notes, commands, and bookmarks |
+| `https://life.whynotsleep.cc/` | Personal living records, photos, travel, and slower logs |
 | `/NiniWithYuan/` | Live GitHub Pages project for `iwannabewater/NiniWithYuan` |
 
 The game channel is a catalog, not a one-game special case. `NiniWithYuan` is the first playable entry and links to both the live route and source repository.
+
+The generated site still builds internal `/channels/<slug>/` pages. Those pages are intended as Cloudflare Worker origin paths for the public channel subdomains.
 
 ## Visual System
 
@@ -62,6 +66,8 @@ The game channel is a catalog, not a one-game special case. `NiniWithYuan` is th
 - no italic text
 
 The site should read like a quiet engineering index: compact, durable, and evidence-oriented.
+
+The home page includes a manual day/night reading-mode toggle and a static client-side search box. Search data is generated from `src/site-data.mjs`, so route labels, profile focus, and playable games stay searchable without a backend.
 
 ## GitHub Pages
 
@@ -108,6 +114,37 @@ For `www`:
 www.whynotsleep.cc CNAME iwannabewater.github.io
 ```
 
-No wildcard records are needed. Do not create `game.whynotsleep.cc` or the other reserved subdomains until a channel moves to its own deployment.
+No wildcard records are needed. Create only the explicit channel subdomains listed below when the Cloudflare Worker router is deployed.
 
 `https://whynotsleep.cc/NiniWithYuan/` is currently a path-level GitHub Pages project route, so it does not require a Cloudflare redirect rule.
+
+### Channel Subdomains
+
+The intended channel behavior is:
+
+```text
+https://game.whynotsleep.cc/       -> serves /channels/game/
+https://blog.whynotsleep.cc/       -> serves /channels/blog/
+https://project.whynotsleep.cc/    -> serves /channels/project/
+https://manuscript.whynotsleep.cc/ -> serves /channels/manuscript/
+https://design.whynotsleep.cc/     -> serves /channels/design/
+https://note.whynotsleep.cc/       -> serves /channels/note/
+https://life.whynotsleep.cc/       -> serves /channels/life/
+```
+
+Because GitHub Pages only has `whynotsleep.cc` configured as the repository custom domain, the clean subdomain URLs should be handled at Cloudflare. Recommended setup:
+
+1. Add proxied DNS records for each channel subdomain. For this originless Worker setup, each channel can use a reserved placeholder address such as `192.0.2.1`; the important part is that the records are proxied by Cloudflare.
+2. Deploy `cloudflare/channel-router.js` with `cloudflare/wrangler.channel-router.toml`.
+3. In the Worker, map the host to the matching internal path and fetch `https://whynotsleep.cc/channels/<slug>/`.
+4. Keep the browser URL on the subdomain. Do not redirect users back to `/channels/<slug>/`.
+
+Deployment command once DNS records exist:
+
+```bash
+wrangler deploy --config cloudflare/wrangler.channel-router.toml
+```
+
+Cloudflare DNS record management: https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/
+Cloudflare Workers routes: https://developers.cloudflare.com/workers/configuration/routing/routes/
+GitHub Pages custom domains: https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site
