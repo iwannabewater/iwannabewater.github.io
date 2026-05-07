@@ -575,30 +575,30 @@ h2 {
 
 .channel-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  perspective: 900px;
 }
 
 .channel-card {
   position: relative;
-  display: grid;
-  min-height: 232px;
-  grid-template-columns: minmax(146px, 0.46fr) minmax(0, 1fr);
-  align-items: center;
-  gap: 28px;
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--border) 82%, var(--stone));
-  border-radius: 22px;
-  background:
-    radial-gradient(circle at 21% 47%, color-mix(in srgb, var(--brand-tint-strong) 56%, transparent) 0 18%, transparent 38%),
-    linear-gradient(145deg, color-mix(in srgb, var(--ivory) 94%, var(--warm-sand)), color-mix(in srgb, var(--parchment) 84%, var(--ivory)));
-  box-shadow: 0 18px 48px rgba(26, 29, 27, 0.055);
-  padding: 28px 30px;
+  display: flex;
+  min-height: 330px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 26px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--ivory) 72%, transparent);
+  padding: 18px;
   text-decoration: none;
-  transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+  transform-origin: 48% 52%;
+  transform-style: preserve-3d;
+  transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  will-change: transform;
 }
 
-.channel-card::before,
 .channel-spec-card::before {
   position: absolute;
   inset: 0;
@@ -611,9 +611,30 @@ h2 {
 }
 
 .channel-card:hover {
-  border-color: color-mix(in srgb, var(--brand) 42%, var(--border));
-  box-shadow: 0 22px 54px rgba(26, 29, 27, 0.085);
-  transform: translateY(-2px);
+  background: var(--ivory);
+  box-shadow: 0 14px 38px rgba(20, 20, 19, 0.07);
+  transform: translateY(-4px) rotateX(0.6deg) rotateY(-0.45deg);
+}
+
+@keyframes channel-card-float {
+  0% {
+    transform: translateY(-2px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  36% {
+    transform: translateY(-6px) rotateX(1deg) rotateY(-0.8deg) rotateZ(-0.35deg);
+  }
+  68% {
+    transform: translateY(-3px) rotateX(-0.45deg) rotateY(0.55deg) rotateZ(0.25deg);
+  }
+  100% {
+    transform: translateY(-4px) rotateX(0.6deg) rotateY(-0.45deg) rotateZ(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .channel-card:hover {
+    animation: channel-card-float 560ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
 }
 
 .module-letter {
@@ -628,37 +649,64 @@ h2 {
   position: relative;
   z-index: 1;
   display: inline-flex;
-  min-width: 158px;
+  width: fit-content;
+  min-width: 2.42ch;
   align-items: baseline;
-  color: var(--near-black);
-  font-family: var(--utility);
+  color: var(--brand);
+  font-family: var(--serif);
   font-feature-settings: "tnum" 1;
-  font-size: clamp(84px, 8vw, 118px);
+  font-size: 34px;
   font-variant-numeric: tabular-nums;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0;
-  line-height: 0.78;
-  text-shadow: 0 14px 34px rgba(20, 20, 19, 0.16);
+  line-height: 1;
+  padding-bottom: 13px;
+  text-shadow: 0 8px 18px rgba(27, 54, 93, 0.09);
 }
 
 .module-number::after {
   position: absolute;
-  left: 18%;
-  bottom: -28px;
-  width: 74px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--near-black) 38%, transparent), transparent);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--near-black) 16%, transparent);
+  left: 0.28ch;
+  bottom: 0;
+  width: 2.05ch;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--brand) 42%, var(--stone)), transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--brand) 18%, transparent);
   content: "";
+  opacity: 0.62;
+  transform: translateX(1px);
+  transition: opacity 180ms ease, transform 180ms ease, width 180ms ease;
 }
 
 .module-number-zero {
-  color: color-mix(in srgb, var(--near-black) 84%, var(--ivory));
+  display: inline-block;
+  color: color-mix(in srgb, var(--brand) 82%, var(--near-black));
+  transform: translate(-0.02em, -2px);
+  transition: transform 180ms ease, text-shadow 180ms ease;
 }
 
 .module-number-digit {
-  margin-left: -0.03em;
-  color: var(--near-black);
+  display: inline-block;
+  margin-left: -0.02em;
+  color: var(--brand);
+  transform: translate(0.04em, 3px);
+  transition: transform 180ms ease, text-shadow 180ms ease;
+}
+
+.channel-card:hover .module-number::after {
+  width: 2.22ch;
+  opacity: 0.82;
+  transform: translateX(4px);
+}
+
+.channel-card:hover .module-number-zero {
+  transform: translate(-0.05em, -4px) rotate(-1.2deg);
+  text-shadow: 0 9px 19px rgba(27, 54, 93, 0.13);
+}
+
+.channel-card:hover .module-number-digit {
+  transform: translate(0.08em, 4px) rotate(0.9deg);
+  text-shadow: 0 7px 16px rgba(27, 54, 93, 0.1);
 }
 
 .channel-card-main {
@@ -851,7 +899,32 @@ h2 {
 
 .channel-spec-card .module-number {
   min-width: 132px;
+  color: var(--near-black);
+  font-family: var(--utility);
   font-size: clamp(74px, 6vw, 100px);
+  font-weight: 900;
+  line-height: 0.78;
+  padding-bottom: 0;
+  text-shadow: 0 14px 34px rgba(20, 20, 19, 0.16);
+}
+
+.channel-spec-card .module-number::after {
+  left: 18%;
+  bottom: -28px;
+  width: 74px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--near-black) 38%, transparent), transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--near-black) 16%, transparent);
+}
+
+.channel-spec-card .module-number-zero {
+  color: color-mix(in srgb, var(--near-black) 84%, var(--ivory));
+  transform: translateY(0);
+}
+
+.channel-spec-card .module-number-digit {
+  color: var(--near-black);
+  transform: translateY(0);
 }
 
 .channel-spec-copy {
@@ -1080,13 +1153,6 @@ html[data-theme="night"] .game-card {
   background-image: none;
 }
 
-html[data-theme="night"] .channel-card,
-html[data-theme="night"] .channel-spec-card {
-  border-color: color-mix(in srgb, var(--stone) 42%, var(--border));
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
-}
-
-html[data-theme="night"] .channel-card::before,
 html[data-theme="night"] .channel-spec-card::before {
   background:
     linear-gradient(90deg, transparent 0 48%, color-mix(in srgb, var(--border) 60%, transparent) 48% 48.2%, transparent 48.2%),
@@ -1094,12 +1160,30 @@ html[data-theme="night"] .channel-spec-card::before {
   opacity: 0.62;
 }
 
-html[data-theme="night"] .module-number {
+html[data-theme="night"] .channel-spec-card {
+  border-color: color-mix(in srgb, var(--stone) 42%, var(--border));
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+html[data-theme="night"] .channel-card .module-number {
+  color: var(--brand);
+  text-shadow: 0 8px 18px rgba(184, 208, 241, 0.08);
+}
+
+html[data-theme="night"] .channel-card .module-number-zero {
+  color: color-mix(in srgb, var(--brand) 82%, var(--near-black));
+}
+
+html[data-theme="night"] .channel-card .module-number-digit {
+  color: var(--brand);
+}
+
+html[data-theme="night"] .channel-spec-card .module-number {
   color: var(--near-black);
   text-shadow: 0 18px 38px rgba(0, 0, 0, 0.34);
 }
 
-html[data-theme="night"] .module-number-zero {
+html[data-theme="night"] .channel-spec-card .module-number-zero {
   color: color-mix(in srgb, var(--near-black) 86%, var(--stone));
 }
 
@@ -1189,19 +1273,18 @@ html[data-theme="night"] .module-number-zero {
 }
 
 @media (min-width: 1180px) {
-  .channel-card:nth-child(7) {
-    grid-column: 1 / -1;
-    grid-template-columns: minmax(170px, 0.24fr) minmax(0, 1fr);
+  .channel-card:nth-child(4) {
+    background: var(--ivory);
   }
 }
 
 @media (max-width: 1120px) {
   .channel-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .channel-card {
-    min-height: 216px;
+    min-height: 260px;
   }
 
   .channel-hero {
@@ -1287,20 +1370,8 @@ html[data-theme="night"] .module-number-zero {
   }
 
   .channel-card {
-    grid-template-columns: minmax(96px, 0.34fr) minmax(0, 1fr);
     min-height: 0;
     padding: 20px;
-    border-radius: 18px;
-  }
-
-  .module-number {
-    min-width: 98px;
-    font-size: 72px;
-  }
-
-  .module-number::after {
-    bottom: -20px;
-    width: 58px;
   }
 
   .channel-spec-card {
