@@ -7,10 +7,12 @@
     "test": "node --test",
     "build": "node src/build.mjs",
     "check": "npm run test && npm run build",
+    "test:ui": "playwright test",
     "preview": "vite preview --host 0.0.0.0",
     "dev": "vite --host 0.0.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "vite": "^7.3.0"
   },
   "engines": {

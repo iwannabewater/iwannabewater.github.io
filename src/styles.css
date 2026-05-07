@@ -77,7 +77,7 @@ button:focus-visible {
   left: 24px;
   top: 16px;
   z-index: 20;
-  transform: translateY(-140%);
+  transform: translateY(-220%);
   border: 1px solid var(--brand);
   border-radius: 6px;
   background: var(--ivory);
@@ -309,7 +309,7 @@ h2 {
 
 .channel-grid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid var(--border);
   border-left: 1px solid var(--border);
 }
