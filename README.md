@@ -1,8 +1,8 @@
 # Why Not Sleep
 
-`whynotsleep.cc` is Winston's public researcher-builder hub: a durable front door for engineering writing, games, project notes, manuscripts, design studies, compact notes, and life records.
+`whynotsleep.cc` is Winston's public researcher-builder hub: a durable front door for large-model systems work, multimodal post-training notes, playable browser games, manuscripts, design studies, compact references, and personal archives.
 
-The first release is intentionally static. The main domain owns identity and routing. Seven channels are shipped as polished internal placeholder pages first, then each channel can move to its own subdomain and repository when it has enough content to justify the split.
+The site is intentionally static. Source data lives in `src/site-data.mjs`, renderers turn that data into plain HTML, and GitHub Actions publishes the generated `dist/` directory to GitHub Pages.
 
 ## Commands
 
@@ -11,59 +11,67 @@ npm install
 npm test
 npm run build
 npm run check
-npm run dev -- --host 0.0.0.0
+npm run test:ui
+npm run preview -- --port 4173
 ```
 
-`npm run check` runs the Node test suite and then emits static output into `dist/`.
+`npm run check` runs the Node test suite and emits the static output tree into `dist/`. `npm run test:ui` builds, previews, and runs Playwright smoke checks through the configured web server.
 
 ## Structure
 
 ```text
-src/site-data.mjs       public profile, channel records, highlights
-src/render.mjs          HTML renderers for home, channel, and 404 pages
+src/site-data.mjs       public profile, contacts, channels, games, highlights
+src/render.mjs          HTML renderers for home, about, channel, and 404 pages
 src/texture.mjs         deterministic local PNG paper texture generator
-src/build.mjs           static build pipeline
-src/styles.css          Kami-adapted web visual system
+src/build.mjs           static build pipeline, CNAME, robots.txt, sitemap.xml
+src/styles.css          visual system and responsive layout rules
+tests/ui/               Playwright smoke checks for desktop and mobile rendering
 dist/                   generated site, not committed
 ```
 
-## Channel Model
+Local planning files, assistant workspaces, scratch output, test output, and generated `dist/` do not belong in this public repository. Keep the tracked tree focused on source, tests, workflow, and project documentation.
 
-| Route | Future host | Role |
-|---|---|---|
-| `/channels/blog/` | `blog.whynotsleep.cc` | Long-form technical essays and engineering narratives |
-| `/channels/game/` | `game.whynotsleep.cc` | Playable browser games and interactive experiments |
-| `/channels/project/` | `project.whynotsleep.cc` | Engineering projects, demos, tools, and repositories |
-| `/channels/manuscript/` | `manuscript.whynotsleep.cc` | Reports, PDFs, white papers, and polished deep dives |
-| `/channels/design/` | `design.whynotsleep.cc` | Visual systems, UI explorations, and design studies |
-| `/channels/note/` | `note.whynotsleep.cc` | Short references, reading notes, commands, and bookmarks |
-| `/channels/life/` | `life.whynotsleep.cc` | Personal living records, photos, travel, and slower daily logs |
+## Public Routes
 
-Do not create wildcard DNS records. Do not create the seven subdomains until a channel moves to its own deployment.
+| Route | Role |
+|---|---|
+| `/` | Primary index and channel map |
+| `/about/` | Research and engineering profile |
+| `/channels/blog/` | Long-form technical essays and engineering narratives |
+| `/channels/game/` | Playable browser game catalog |
+| `/channels/project/` | Engineering projects, demos, tools, and repositories |
+| `/channels/manuscript/` | Reports, PDFs, white papers, and polished deep dives |
+| `/channels/design/` | Visual systems, UI explorations, and design studies |
+| `/channels/note/` | Short references, reading notes, commands, and bookmarks |
+| `/channels/life/` | Personal living records, photos, travel, and slower logs |
+| `/NiniWithYuan/` | Live GitHub Pages project for `iwannabewater/NiniWithYuan` |
+
+The game channel is a catalog, not a one-game special case. `NiniWithYuan` is the first playable entry and links to both the live route and source repository.
 
 ## Visual System
 
-The site adapts the Kami reference system:
-
-- parchment page background `#f5f4ed`
+- warm paper background `#f5f4ed`
 - ivory surfaces `#faf9f5`
-- ink-blue accent `#1B365D`
-- serif-led hierarchy
-- warm gray borders and text
+- ink-blue primary accent `#1B365D`
+- restrained green signal accent `#2F6F5E`
+- small copper annotation accent `#8E513A`
+- serif-led hierarchy with monospace route and metadata labels
 - no pure-white page background
 - no hard shadows
-- no invented second accent color
+- no decorative gradient blobs
 - no italic text
+
+The site should read like a quiet engineering index: compact, durable, and evidence-oriented.
 
 ## GitHub Pages
 
-This repository is intended to become the GitHub user-site repository:
+This repository is the GitHub user-site repository:
 
 ```text
 iwannabewater/iwannabewater.github.io
 ```
 
-Deployment uses GitHub Actions and uploads `dist/` as the Pages artifact. The workflow is pinned to current action release tags verified on 2026-05-07:
+Deployment uses GitHub Actions and uploads `dist/` as the Pages artifact. The workflow uses:
 
 - `actions/checkout@v6.0.2`
 - `actions/setup-node@v6.4.0`
@@ -71,7 +79,15 @@ Deployment uses GitHub Actions and uploads `dist/` as the Pages artifact. The wo
 - `actions/upload-pages-artifact@v5.0.0`
 - `actions/deploy-pages@v5.0.0`
 
+The generated `dist/CNAME` and root `CNAME` both declare:
+
+```text
+whynotsleep.cc
+```
+
 ## Cloudflare DNS
+
+Cloudflare owns DNS for `whynotsleep.cc`; this repository does not contain Cloudflare credentials and cannot mutate the zone by itself.
 
 For the apex domain:
 
@@ -92,4 +108,6 @@ For `www`:
 www.whynotsleep.cc CNAME iwannabewater.github.io
 ```
 
-After DNS is correct, set the GitHub Pages custom domain to `whynotsleep.cc`, wait for certificate provisioning, and enable HTTPS.
+No wildcard records are needed. Do not create `game.whynotsleep.cc` or the other reserved subdomains until a channel moves to its own deployment.
+
+`https://whynotsleep.cc/NiniWithYuan/` is currently a path-level GitHub Pages project route, so it does not require a Cloudflare redirect rule.

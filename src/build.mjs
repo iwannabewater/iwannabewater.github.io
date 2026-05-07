@@ -1,8 +1,16 @@
 import { mkdir, rm, writeFile, copyFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { channels, highlights, signals, siteProfile } from "./site-data.mjs";
-import { renderChannelPage, renderHomePage, renderNotFoundPage } from "./render.mjs";
+import {
+  aboutProfile,
+  channels,
+  contacts,
+  games,
+  highlights,
+  signals,
+  siteProfile,
+} from "./site-data.mjs";
+import { renderAboutPage, renderChannelPage, renderHomePage, renderNotFoundPage } from "./render.mjs";
 import { createPaperGrainPng } from "./texture.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,6 +20,25 @@ const projectRoot = resolve(__dirname, "..");
 async function writePage(path, html) {
   await mkdir(dirname(path), { recursive: true });
   await writeFile(path, html, "utf8");
+}
+
+function renderRobotsTxt() {
+  return `User-agent: *
+Allow: /
+Sitemap: https://${siteProfile.domain}/sitemap.xml
+`;
+}
+
+function renderSitemapXml(paths) {
+  const urls = paths
+    .map((path) => `  <url><loc>https://${siteProfile.domain}${path}</loc></url>`)
+    .join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>
+`;
 }
 
 export async function buildSite({ outDir = join(projectRoot, "dist") } = {}) {
@@ -24,17 +51,28 @@ export async function buildSite({ outDir = join(projectRoot, "dist") } = {}) {
 
   await writePage(
     join(outDir, "index.html"),
-    renderHomePage({ siteProfile, channels, highlights, signals }),
+    renderHomePage({ siteProfile, channels, highlights, signals, aboutProfile, contacts }),
+  );
+
+  await writePage(
+    join(outDir, "about", "index.html"),
+    renderAboutPage({ siteProfile, channels, aboutProfile, contacts }),
   );
 
   for (const channel of channels) {
     await writePage(
       join(outDir, "channels", channel.slug, "index.html"),
-      renderChannelPage({ siteProfile, channel, channels }),
+      renderChannelPage({ siteProfile, channel, channels, games, contacts }),
     );
   }
 
-  await writePage(join(outDir, "404.html"), renderNotFoundPage({ siteProfile, channels }));
+  await writePage(join(outDir, "404.html"), renderNotFoundPage({ siteProfile, channels, contacts }));
+  await writeFile(join(outDir, "robots.txt"), renderRobotsTxt(), "utf8");
+  await writeFile(
+    join(outDir, "sitemap.xml"),
+    renderSitemapXml(["/", "/about/", ...channels.map((channel) => channel.path), ...games.map((game) => game.path)]),
+    "utf8",
+  );
 }
 
 if (process.argv[1] === __filename) {

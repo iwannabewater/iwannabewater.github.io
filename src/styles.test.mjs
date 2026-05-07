@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-test("styles implement the approved Kami web token contract", async () => {
+test("styles implement the site visual token contract", async () => {
   const css = await readFile(new URL("./styles.css", import.meta.url), "utf8");
   const requiredTokens = [
     "--parchment: #f5f4ed",
@@ -15,6 +15,8 @@ test("styles implement the approved Kami web token contract", async () => {
     "--olive: #504e49",
     "--stone: #6b6a64",
     "--border-soft: #e5e3d8",
+    "--signal: #2F6F5E",
+    "--copper: #8E513A",
   ];
 
   for (const token of requiredTokens) {
@@ -22,7 +24,7 @@ test("styles implement the approved Kami web token contract", async () => {
   }
 });
 
-test("styles avoid Kami anti-patterns", async () => {
+test("styles avoid visual anti-patterns", async () => {
   const css = await readFile(new URL("./styles.css", import.meta.url), "utf8");
   assert.doesNotMatch(css, /font-style\s*:\s*italic/i);
   assert.doesNotMatch(css, /background(?:-color)?\s*:\s*#fff(?:fff)?\b/i);
@@ -34,5 +36,8 @@ test("styles include responsive, focus, and paper texture rules", async () => {
   assert.match(css, /@media\s*\(max-width:\s*760px\)/);
   assert.match(css, /@media\s*\(min-width:\s*1180px\)/);
   assert.match(css, /:focus-visible/);
+  assert.match(css, /\.brand-mark-icon/);
+  assert.match(css, /\.game-grid/);
+  assert.match(css, /\.contact-link/);
   assert.match(css, /paper-grain\.png/);
 });

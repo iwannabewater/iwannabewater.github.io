@@ -4,11 +4,44 @@ export const siteProfile = {
   domain: "whynotsleep.cc",
   githubUser: "iwannabewater",
   githubUrl: "https://github.com/iwannabewater",
-  tagline: "A researcher-builder index for systems, games, notes, manuscripts, design, and life records.",
+  email: "iwannabewater@gmail.com",
+  xUrl: "https://x.com/lilmochimo01",
+  telegramUrl: "https://t.me/lilmochimo",
+  tagline:
+    "A researcher-builder index for large-model systems, multimodal post-training, playable experiments, notes, manuscripts, and life records.",
   thesis:
-    "Why Not Sleep is the public routing layer for long-form engineering work, playable experiments, project notes, and personal archives. The first release is intentionally quiet: durable links first, content systems next.",
-  availability: "Preparing public archives channel by channel",
+    "Why Not Sleep is the public routing layer for long-form engineering work, playable experiments, project notes, and personal archives. It favors durable links, reproducible context, and finished artifacts over feed-shaped noise.",
+  availability: "Public routes active; archives expanding channel by channel",
   locationLabel: "Asia/Shanghai",
+  role: "Large-model / multimodal algorithm engineer",
+};
+
+export const aboutProfile = {
+  headline: "Large-model systems, multimodal post-training, and agentic optimization.",
+  summary:
+    "Winston is a large-model and multimodal algorithm engineer focused on post-training for LLM/MM systems, agentic reinforcement learning, and generative search advertising and recommendation. This site is the public index for technical writing, games, project notes, design studies, manuscripts, and slower personal records.",
+  focusAreas: [
+    {
+      label: "LLM/MM post-training",
+      body:
+        "Preference optimization, instruction following, multimodal alignment, evaluation loops, and data recipes that make model behavior measurable.",
+    },
+    {
+      label: "Agentic RL",
+      body:
+        "Training and evaluation patterns for agents that plan, use tools, recover from errors, and improve through interaction instead of static prompting alone.",
+    },
+    {
+      label: "Generative search ads and recommendations",
+      body:
+        "Retrieval, ranking, generation, auction-aware objectives, user intent modeling, and feedback systems for search and recommendation surfaces.",
+    },
+  ],
+  principles: [
+    "Treat claims as artifacts: show constraints, evidence, failure modes, and trade-offs.",
+    "Keep public routes stable so projects, notes, and games can mature without link churn.",
+    "Design interfaces with calm density: scannable, direct, and useful under repeated visits.",
+  ],
 };
 
 export const channels = [
@@ -33,7 +66,7 @@ export const channels = [
     title: "Game Index",
     host: "game.whynotsleep.cc",
     path: "/channels/game/",
-    status: "Reserved",
+    status: "Live",
     summary:
       "Playable browser games and interactive experiments collected as a calm arcade, with each entry documented like a small product.",
     planned: [
@@ -128,17 +161,17 @@ export const channels = [
 
 export const highlights = [
   {
-    label: "Manuscript queue",
-    title: "Technical long-form archive",
+    label: "About",
+    title: "Work centered on post-training and agentic systems",
     body:
-      "Existing local manuscripts can be promoted into the manuscript channel once their public URLs and source notes are finalized.",
-    path: "/channels/manuscript/",
+      "The profile page now states the current research and engineering focus without turning the home page into a resume.",
+    path: "/about/",
   },
   {
-    label: "Game route",
-    title: "Playable work has a dedicated shelf",
+    label: "Playable now",
+    title: "NiniWithYuan is part of the game shelf",
     body:
-      "Games are treated as first-class artifacts: entry pages, control notes, version history, and room for future standalone deploys.",
+      "The game channel is structured as a catalog, so NiniWithYuan is the first entry instead of a one-off navigation exception.",
     path: "/channels/game/",
   },
   {
@@ -151,10 +184,54 @@ export const highlights = [
 ];
 
 export const signals = [
-  "AI systems",
+  "LLM/MM post-training",
+  "Agentic RL",
+  "Generative search ads",
+  "Recommendation systems",
   "Static publishing",
   "Browser games",
-  "Technical writing",
-  "Design systems",
-  "Personal archive",
+];
+
+export const games = [
+  {
+    slug: "nini-with-yuan",
+    title: "NiniWithYuan",
+    subtitle: "Nini & Yuan's Adventures",
+    status: "Playable",
+    path: "/NiniWithYuan/",
+    liveUrl: "https://whynotsleep.cc/NiniWithYuan/",
+    fallbackUrl: "https://iwannabewater.github.io/NiniWithYuan/",
+    repoUrl: "https://github.com/iwannabewater/NiniWithYuan",
+    summary:
+      "A dual-character browser adventure with chapter selection, mobile controls, automatic saves, and an offline-friendly PWA shell.",
+    details: [
+      "Served as a GitHub Pages project under the same custom domain path.",
+      "Kept inside a game catalog so future playable work can be added without redesigning the channel.",
+      "Documented with live play and source links for both users and engineers.",
+    ],
+    tags: ["Browser game", "Canvas", "PWA", "Mobile controls"],
+  },
+];
+
+export const contacts = [
+  {
+    id: "github",
+    label: "GitHub",
+    href: siteProfile.githubUrl,
+  },
+  {
+    id: "email",
+    label: "Email",
+    href: `mailto:${siteProfile.email}`,
+  },
+  {
+    id: "x",
+    label: "X.com",
+    href: siteProfile.xUrl,
+  },
+  {
+    id: "telegram",
+    label: "Telegram",
+    href: siteProfile.telegramUrl,
+  },
 ];

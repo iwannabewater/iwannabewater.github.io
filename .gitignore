@@ -1,4 +1,8 @@
 .superpowers/
+.agents/
+.claude/
+.codex/
+docs/superpowers/
 node_modules/
 dist/
 tmp/
