@@ -43,6 +43,9 @@ test("styles include responsive, focus, and paper texture rules", async () => {
   assert.match(css, /\.brand-mark-arc/);
   assert.match(css, /\.theme-toggle/);
   assert.match(css, /\.module-number[\s\S]*font-variant-numeric:\s*tabular-nums/);
+  assert.match(css, /\.module-number-zero/);
+  assert.match(css, /\.channel-spec-card/);
+  assert.match(css, /\.planned-list[\s\S]*grid-template-columns:\s*repeat\(2/);
   assert.match(css, /\.primary-link[\s\S]*font-family:\s*var\(--comic\)/);
   assert.match(css, /\.secondary-link[\s\S]*font-family:\s*var\(--comic\)/);
   assert.match(css, /html\[data-theme="night"\]/);

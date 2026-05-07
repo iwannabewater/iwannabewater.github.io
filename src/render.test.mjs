@@ -35,10 +35,16 @@ test("home page renders approved identity and all channel routes", () => {
 });
 
 test("channel page renders one h1, host tag, and homepage return link", () => {
-  const html = renderChannelPage({ siteProfile, channel: channels[0], channels, contacts });
-  assert.equal((html.match(/<h1/g) || []).length, 1);
-  assert.match(html, new RegExp(channels[0].host.replaceAll(".", "\\.")));
-  assert.match(html, /href="https:\/\/whynotsleep\.cc\/"/);
+  for (const channel of channels) {
+    const html = renderChannelPage({ siteProfile, channel, channels, contacts });
+    assert.equal((html.match(/<h1/g) || []).length, 1);
+    assert.match(html, new RegExp(channel.host.replaceAll(".", "\\.")));
+    assert.match(html, /class="channel-spec-card"/);
+    assert.match(html, /class="module-number-zero"/);
+    assert.match(html, /class="module-number-digit"/);
+    assert.match(html, /class="planned-list"/);
+    assert.match(html, /href="https:\/\/whynotsleep\.cc\/"/);
+  }
 });
 
 test("about page renders profile focus and contact links as new-tab anchors", () => {

@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { channels } from "../../src/site-data.mjs";
 
 async function expectNoHorizontalOverflow(page) {
   const overflow = await page.evaluate(() => ({
@@ -38,10 +39,15 @@ test("homepage renders on mobile without horizontal overflow", async ({ page }) 
 
 test("channel page has one h1 and no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto("/channels/blog/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Technical Blog");
-  await expect(page.locator("h1")).toHaveCount(1);
-  await expectNoHorizontalOverflow(page);
+  for (const channel of channels) {
+    await page.goto(channel.path);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(channel.title);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator(".channel-spec-card")).toContainText(channel.host);
+    await expect(page.locator(".channel-spec-card .module-number")).toBeVisible();
+    await expect(page.locator(".planned-list li")).toHaveCount(channel.planned.length);
+    await expectNoHorizontalOverflow(page);
+  }
 });
 
 test("about page renders profile and contact routes", async ({ page }) => {

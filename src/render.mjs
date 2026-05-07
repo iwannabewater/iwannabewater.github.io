@@ -76,6 +76,18 @@ function routeTag(channel) {
   return `<span class="route-tag">${escapeHtml(channel.host)}</span>`;
 }
 
+function channelNumberAt(index) {
+  return String(index + 1).padStart(2, "0");
+}
+
+function renderModuleNumber(number) {
+  const [lead, digit] = number.split("");
+  return `<span class="module-number" aria-hidden="true">
+      <span class="module-number-zero">${escapeHtml(lead)}</span>
+      <span class="module-number-digit">${escapeHtml(digit)}</span>
+    </span>`;
+}
+
 function newTabAttrs(label) {
   return ` target="_blank" rel="noopener noreferrer" aria-label="${attr(`${label} opens in a new tab`)}"`;
 }
@@ -182,9 +194,9 @@ function renderSignalStrip(signals) {
 }
 
 function renderChannelCard(channel, index) {
-  const number = String(index + 1).padStart(2, "0");
+  const number = channelNumberAt(index);
   return `<a class="channel-card" href="${attr(channelUrl(channel))}">
-    <span class="module-number">${number}</span>
+    ${renderModuleNumber(number)}
     <span class="channel-card-main">
       <span class="eyebrow">${escapeHtml(channel.status)}</span>
       <strong>${escapeHtml(channel.title)}</strong>
@@ -192,6 +204,25 @@ function renderChannelCard(channel, index) {
       ${routeTag(channel)}
     </span>
   </a>`;
+}
+
+function renderChannelSpecCard(channel, index) {
+  const number = channelNumberAt(index);
+  return `<aside class="channel-spec-card" aria-label="${attr(`${channel.title} route card`)}">
+    ${renderModuleNumber(number)}
+    <div class="channel-spec-copy">
+      <span class="eyebrow">${escapeHtml(channel.slug)} route</span>
+      <strong>${escapeHtml(channel.host)}</strong>
+      <span>${escapeHtml(channel.signal)} / ${escapeHtml(channel.status)}</span>
+    </div>
+  </aside>`;
+}
+
+function renderPlannedItem(item, index) {
+  return `<li>
+    <span>${escapeHtml(channelNumberAt(index))}</span>
+    <strong>${escapeHtml(item)}</strong>
+  </li>`;
 }
 
 function renderSearchSection(searchEntries) {
@@ -420,13 +451,20 @@ export function renderAboutPage({ siteProfile, channels, aboutProfile, contacts 
 
 export function renderChannelPage({ siteProfile, channel, channels, games = [], contacts = [] }) {
   const channelContext = channel.status === "Live" ? "Current channel" : "Future host";
+  const channelIndex = Math.max(
+    channels.findIndex((item) => item.slug === channel.slug),
+    0,
+  );
   const body = `<article class="channel-page">
     <a class="back-link" href="https://${attr(siteProfile.domain)}/">Back to ${escapeHtml(siteProfile.domain)}</a>
     <header class="channel-hero">
-      <p class="overline">${escapeHtml(channel.status)} / ${escapeHtml(channelContext)}</p>
-      <h1>${escapeHtml(channel.title)}</h1>
-      <p class="lede">${escapeHtml(channel.summary)}</p>
-      ${routeTag(channel)}
+      <div class="channel-hero-copy">
+        <p class="overline">${escapeHtml(channel.status)} / ${escapeHtml(channelContext)}</p>
+        <h1>${escapeHtml(channel.title)}</h1>
+        <p class="lede">${escapeHtml(channel.summary)}</p>
+        ${routeTag(channel)}
+      </div>
+      ${renderChannelSpecCard(channel, channelIndex)}
     </header>
     ${channel.slug === "game" ? renderGameCatalog(games) : ""}
     <section class="channel-detail" aria-labelledby="planned-title">
@@ -435,7 +473,7 @@ export function renderChannelPage({ siteProfile, channel, channels, games = [], 
         <h2 id="planned-title">What belongs here</h2>
       </div>
       <ul class="planned-list">
-        ${channel.planned.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        ${channel.planned.map(renderPlannedItem).join("")}
       </ul>
     </section>
     <section class="next-routes" aria-labelledby="next-routes-title">
