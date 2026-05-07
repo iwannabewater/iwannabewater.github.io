@@ -46,7 +46,7 @@ Local planning files, assistant workspaces, scratch output, test output, and gen
 | `https://design.whynotsleep.cc/` | Visual systems, UI explorations, and design studies |
 | `https://note.whynotsleep.cc/` | Short references, reading notes, commands, and bookmarks |
 | `https://life.whynotsleep.cc/` | Personal living records, photos, travel, and slower logs |
-| `/NiniWithYuan/` | Live GitHub Pages project for `iwannabewater/NiniWithYuan` |
+| `https://game.whynotsleep.cc/niniwithyuan/` | Live game route for `iwannabewater/NiniWithYuan` |
 
 The game channel is a catalog, not a one-game special case. `NiniWithYuan` is the first playable entry and links to both the live route and source repository.
 
@@ -116,7 +116,7 @@ www.whynotsleep.cc CNAME iwannabewater.github.io
 
 No wildcard records are needed. Create only the explicit channel subdomains listed below when the Cloudflare Worker router is deployed.
 
-`https://whynotsleep.cc/NiniWithYuan/` is currently a path-level GitHub Pages project route, so it does not require a Cloudflare redirect rule.
+`https://game.whynotsleep.cc/niniwithyuan/` is the public game URL. The Worker maps it to the existing GitHub Pages project path `/NiniWithYuan/` so the browser stays inside the game subdomain while the game assets keep working.
 
 ### Channel Subdomains
 
@@ -124,6 +124,7 @@ The intended channel behavior is:
 
 ```text
 https://game.whynotsleep.cc/       -> serves /channels/game/
+https://game.whynotsleep.cc/niniwithyuan/ -> serves /NiniWithYuan/
 https://blog.whynotsleep.cc/       -> serves /channels/blog/
 https://project.whynotsleep.cc/    -> serves /channels/project/
 https://manuscript.whynotsleep.cc/ -> serves /channels/manuscript/

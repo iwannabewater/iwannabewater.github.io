@@ -79,7 +79,7 @@ export async function buildSite({ outDir = join(projectRoot, "dist") } = {}) {
       "/",
       "/about/",
       ...channels.map((channel) => `https://${channel.host}/`),
-      ...games.map((game) => game.path),
+      ...games.map((game) => game.liveUrl ?? game.path),
     ]),
     "utf8",
   );

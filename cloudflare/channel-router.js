@@ -10,8 +10,28 @@ const CHANNEL_PATHS = {
 
 const ROOT_ASSET_PATHS = ["/styles.css", "/site.js", "/robots.txt", "/sitemap.xml"];
 const ROOT_ASSET_PREFIXES = ["/assets/", "/NiniWithYuan/"];
+const GAME_APP_ALIASES = {
+  "/niniwithyuan": "/NiniWithYuan/",
+};
+
+function aliasPathFor(requestUrl) {
+  if (requestUrl.hostname !== "game.whynotsleep.cc") return null;
+
+  const pathname = requestUrl.pathname.replace(/\/+$/, "") || "/";
+  for (const [publicPrefix, originPrefix] of Object.entries(GAME_APP_ALIASES)) {
+    if (pathname === publicPrefix) return originPrefix;
+    if (pathname.startsWith(`${publicPrefix}/`)) {
+      return `${originPrefix}${requestUrl.pathname.slice(publicPrefix.length + 1)}`;
+    }
+  }
+
+  return null;
+}
 
 export function originPathFor(requestUrl) {
+  const aliasPath = aliasPathFor(requestUrl);
+  if (aliasPath) return aliasPath;
+
   if (
     ROOT_ASSET_PATHS.includes(requestUrl.pathname) ||
     ROOT_ASSET_PREFIXES.some((prefix) => requestUrl.pathname.startsWith(prefix))

@@ -19,6 +19,12 @@ test("channel router serves shared root assets from the apex origin", () => {
   assert.equal(originPathFor(new URL("https://game.whynotsleep.cc/NiniWithYuan/")), "/NiniWithYuan/");
 });
 
+test("channel router maps lowercase game app aliases to their GitHub Pages project path", () => {
+  assert.equal(originPathFor(new URL("https://game.whynotsleep.cc/niniwithyuan")), "/NiniWithYuan/");
+  assert.equal(originPathFor(new URL("https://game.whynotsleep.cc/niniwithyuan/")), "/NiniWithYuan/");
+  assert.equal(originPathFor(new URL("https://game.whynotsleep.cc/niniwithyuan/styles.css")), "/NiniWithYuan/styles.css");
+});
+
 test("channel router rejects unknown hosts", () => {
   assert.equal(originPathFor(new URL("https://unknown.whynotsleep.cc/")), null);
 });

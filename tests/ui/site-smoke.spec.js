@@ -14,10 +14,12 @@ test("homepage renders on desktop without horizontal overflow", async ({ page })
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Winston / Why Not Sleep");
   await expect(page.getByText("Larger than life")).toBeVisible();
   await expect(page.getByRole("link", { name: /Read the profile/i })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Read the profile/i })).toHaveCSS("font-family", /Comic Sans|Comic Neue|Chalkboard|Marker Felt|cursive/);
   await expect(page.getByRole("link", { name: /GitHub opens in a new tab/i })).toHaveAttribute("target", "_blank");
   const navLinks = page.getByRole("navigation", { name: "Primary" }).getByRole("link");
   await expect(navLinks.last()).toHaveText("about");
   await expect(page.locator(".channel-card", { hasText: "Game Index" })).toHaveAttribute("href", "https://game.whynotsleep.cc/");
+  await expect(page.locator(".module-number").first()).toHaveCSS("font-variant-numeric", /tabular-nums/);
   await page.getByLabel("Search the site").fill("Nini");
   await expect(page.locator(".search-result", { hasText: "NiniWithYuan" })).toBeVisible();
   await page.getByRole("button", { name: "Switch reading mode" }).click();
@@ -58,7 +60,7 @@ test("game channel exposes NiniWithYuan without assuming it is the only game", a
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Game Index");
   await expect(page.getByRole("heading", { name: "Catalog entries" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "NiniWithYuan" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Play NiniWithYuan opens in a new tab/i })).toHaveAttribute("href", "https://whynotsleep.cc/NiniWithYuan/");
+  await expect(page.getByRole("link", { name: /Play NiniWithYuan opens in a new tab/i })).toHaveAttribute("href", "https://game.whynotsleep.cc/niniwithyuan/");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://game.whynotsleep.cc/");
   await expectNoHorizontalOverflow(page);
 });

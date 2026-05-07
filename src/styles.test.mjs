@@ -9,7 +9,8 @@ test("styles implement the site visual token contract", async () => {
     "--ivory: #faf9f5",
     "--warm-sand: #e8e6dc",
     "--brand: #1B365D",
-    "--brand-tint: #EEF2F7",
+    "--brand-tint: #EEE5D4",
+    "--tag-bg: #ECE2D1",
     "--near-black: #141413",
     "--dark-warm: #3d3d3a",
     "--olive: #504e49",
@@ -17,6 +18,7 @@ test("styles implement the site visual token contract", async () => {
     "--border-soft: #e5e3d8",
     "--signal: #2F6F5E",
     "--copper: #8E513A",
+    "--comic:",
     "--hand:",
   ];
 
@@ -38,7 +40,11 @@ test("styles include responsive, focus, and paper texture rules", async () => {
   assert.match(css, /@media\s*\(min-width:\s*1180px\)/);
   assert.match(css, /:focus-visible/);
   assert.match(css, /\.brand-mark-icon/);
+  assert.match(css, /\.brand-mark-arc/);
   assert.match(css, /\.theme-toggle/);
+  assert.match(css, /\.module-number[\s\S]*font-variant-numeric:\s*tabular-nums/);
+  assert.match(css, /\.primary-link[\s\S]*font-family:\s*var\(--comic\)/);
+  assert.match(css, /\.secondary-link[\s\S]*font-family:\s*var\(--comic\)/);
   assert.match(css, /html\[data-theme="night"\]/);
   assert.match(css, /\.search-band/);
   assert.match(css, /\.motto/);

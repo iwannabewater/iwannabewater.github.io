@@ -5,7 +5,7 @@ const statusCopy = {
   Live: "playable now",
 };
 
-const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#1B365D"/><circle cx="31" cy="30" r="15" fill="#FAF9F5"/><circle cx="38" cy="25" r="15" fill="#1B365D"/><path d="M45 41l2.4 5.2L53 48.6l-5.6 2.2L45 56l-2.4-5.2-5.6-2.2 5.6-2.4L45 41Z" fill="#D7A45B"/><path d="M16 46c6.8 4.6 15.2 5.4 23 2.4" fill="none" stroke="#FAF9F5" stroke-width="2.4" stroke-linecap="round" opacity=".72"/></svg>`;
+const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="18" fill="#17231f"/><path d="M20 43c9.8 4.5 20.9 1.7 26.5-6.8" fill="none" stroke="#f1eee6" stroke-width="3.2" stroke-linecap="round"/><path d="M30 14c-5.6 7.8-3.6 18.9 4.2 24.5 4.5 3.2 10.3 4 15.4 2.1A20.8 20.8 0 1 1 30 14Z" fill="#f1eee6"/><path d="M45 14l1.9 4.1 4.1 1.9-4.1 1.9L45 26l-1.9-4.1L39 20l4.1-1.9L45 14Z" fill="#d6a55d"/><circle cx="18" cy="20" r="2.4" fill="#7b8d77"/></svg>`;
 
 const contactIcons = {
   github: `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.7c-5.2 0-9.4 4.2-9.4 9.4 0 4.2 2.7 7.7 6.5 8.9.5.1.7-.2.7-.5v-1.8c-2.6.6-3.2-1.1-3.2-1.1-.4-1.1-1-1.4-1-1.4-.9-.6.1-.6.1-.6 1 0 1.5 1 1.5 1 .8 1.5 2.2 1 2.7.8.1-.6.3-1 .6-1.3-2.1-.2-4.3-1-4.3-4.6 0-1 .4-1.9 1-2.5-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.6 1a9 9 0 0 1 4.8 0c1.8-1.2 2.6-1 2.6-1 .5 1.3.2 2.3.1 2.6.7.7 1 1.5 1 2.5 0 3.6-2.2 4.4-4.3 4.6.3.3.6.9.6 1.8v2.6c0 .3.2.6.7.5a9.4 9.4 0 0 0-3-18.3Z"/></svg>`,
@@ -41,11 +41,11 @@ function encodeSvg(svg) {
 
 function renderBrandMark() {
   return `<svg class="brand-mark-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-        <circle class="brand-mark-sky" cx="32" cy="32" r="25" />
-        <circle class="brand-mark-moon" cx="29" cy="29" r="13" />
-        <circle class="brand-mark-cutout" cx="35" cy="24" r="13" />
-        <path class="brand-mark-star" d="M45 39l2 4.2 4.5 1.8-4.5 1.8-2 4.2-2-4.2-4.5-1.8 4.5-1.8L45 39Z" />
-        <path class="brand-mark-horizon" d="M18 45c6.8 4.4 15 5 22.6 2.1" />
+        <path class="brand-mark-arc" d="M13 37.8c9.4 8.5 26.3 8.4 36.4-1.2" />
+        <path class="brand-mark-crescent" d="M38.3 13.8a17.8 17.8 0 0 0 7.1 27.3 20.1 20.1 0 1 1-7.1-27.3Z" />
+        <path class="brand-mark-quill" d="M21 45.5c7.3-1.7 15.1-6 23.4-12.8" />
+        <path class="brand-mark-spark" d="M46 14l1.8 3.8 3.9 1.7-3.9 1.7L46 25l-1.8-3.8-3.9-1.7 3.9-1.7L46 14Z" />
+        <circle class="brand-mark-dot" cx="20" cy="22" r="2.2" />
       </svg>`;
 }
 

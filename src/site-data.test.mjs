@@ -46,6 +46,7 @@ test("game catalog includes NiniWithYuan with live and source routes", () => {
   assert.equal(games.length, 1);
   assert.equal(games[0].title, "NiniWithYuan");
   assert.equal(games[0].path, "/NiniWithYuan/");
+  assert.equal(games[0].liveUrl, "https://game.whynotsleep.cc/niniwithyuan/");
   assert.equal(games[0].repoUrl, "https://github.com/iwannabewater/NiniWithYuan");
 });
 
@@ -62,5 +63,5 @@ test("contacts expose the public footer destinations", () => {
 test("search entries cover profile, channel subdomains, and playable games", () => {
   assert.ok(searchEntries.some((entry) => entry.url === "/about/"));
   assert.ok(searchEntries.some((entry) => entry.url === "https://game.whynotsleep.cc/"));
-  assert.ok(searchEntries.some((entry) => entry.url === "/NiniWithYuan/"));
+  assert.ok(searchEntries.some((entry) => entry.url === "https://game.whynotsleep.cc/niniwithyuan/"));
 });

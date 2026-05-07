@@ -200,7 +200,7 @@ export const games = [
     subtitle: "Nini & Yuan's Adventures",
     status: "Playable",
     path: "/NiniWithYuan/",
-    liveUrl: "https://whynotsleep.cc/NiniWithYuan/",
+    liveUrl: "https://game.whynotsleep.cc/niniwithyuan/",
     fallbackUrl: "https://iwannabewater.github.io/NiniWithYuan/",
     repoUrl: "https://github.com/iwannabewater/NiniWithYuan",
     summary:
@@ -254,7 +254,7 @@ export const searchEntries = [
   ...games.map((game) => ({
     title: game.title,
     category: "Game",
-    url: game.path,
+    url: game.liveUrl ?? game.path,
     text: [game.subtitle, game.summary, ...game.details, ...game.tags].join(" "),
   })),
 ];

@@ -54,6 +54,6 @@ test("game channel renders NiniWithYuan as a catalog entry", () => {
   const html = renderChannelPage({ siteProfile, channel: gameChannel, channels, games, contacts });
   assert.match(html, /NiniWithYuan/);
   assert.match(html, /<link rel="canonical" href="https:\/\/game\.whynotsleep\.cc\/">/);
-  assert.match(html, /href="https:\/\/whynotsleep\.cc\/NiniWithYuan\/" target="_blank"/);
+  assert.match(html, /href="https:\/\/game\.whynotsleep\.cc\/niniwithyuan\/" target="_blank"/);
   assert.match(html, /href="https:\/\/github.com\/iwannabewater\/NiniWithYuan" target="_blank"/);
 });
