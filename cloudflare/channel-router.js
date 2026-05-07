@@ -11,7 +11,7 @@ const CHANNEL_PATHS = {
 const ROOT_ASSET_PATHS = ["/styles.css", "/site.js", "/robots.txt", "/sitemap.xml"];
 const ROOT_ASSET_PREFIXES = ["/assets/", "/NiniWithYuan/"];
 
-function originPathFor(requestUrl) {
+export function originPathFor(requestUrl) {
   if (
     ROOT_ASSET_PATHS.includes(requestUrl.pathname) ||
     ROOT_ASSET_PREFIXES.some((prefix) => requestUrl.pathname.startsWith(prefix))
