@@ -1,0 +1,19 @@
+{
+  "name": "iwannabewater.github.io",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "build": "node src/build.mjs",
+    "check": "npm run test && npm run build",
+    "preview": "vite preview --host 0.0.0.0",
+    "dev": "vite --host 0.0.0.0"
+  },
+  "devDependencies": {
+    "vite": "^7.3.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
