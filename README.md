@@ -1,6 +1,6 @@
 # Why Not Sleep
 
-`whynotsleep.cc` is Winston's public researcher-builder hub: a durable front door for large-model systems work, multimodal post-training notes, playable browser games, manuscripts, design studies, compact references, and personal archives.
+`whynotsleep.cc` is a public researcher-builder hub: a durable front door for large-model systems work, multimodal post-training notes, playable browser games, manuscripts, design studies, compact references, and personal archives.
 
 The site is intentionally static. Source data lives in `src/site-data.mjs`, renderers turn that data into plain HTML, and GitHub Actions publishes the generated `dist/` directory to GitHub Pages.
 
