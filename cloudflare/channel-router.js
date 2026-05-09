@@ -1,3 +1,6 @@
+const BLOG_HOST = "blog.whynotsleep.cc";
+const BLOG_PAGES_ORIGIN = "http://iwannabewater.github.io";
+
 const CHANNEL_PATHS = {
   "game.whynotsleep.cc": "/channels/game/",
   "project.whynotsleep.cc": "/channels/project/",
@@ -12,6 +15,14 @@ const ROOT_ASSET_PREFIXES = ["/assets/", "/NiniWithYuan/"];
 const GAME_APP_ALIASES = {
   "/niniwithyuan": "/NiniWithYuan/",
 };
+
+export function blogOriginUrlFor(requestUrl) {
+  if (requestUrl.hostname !== BLOG_HOST) return null;
+
+  const originUrl = new URL(requestUrl.pathname, BLOG_PAGES_ORIGIN);
+  originUrl.search = requestUrl.search;
+  return originUrl.toString();
+}
 
 function aliasPathFor(requestUrl) {
   if (requestUrl.hostname !== "game.whynotsleep.cc") return null;
@@ -48,6 +59,30 @@ export function originPathFor(requestUrl) {
 export default {
   async fetch(request) {
     const requestUrl = new URL(request.url);
+    const blogOriginUrl = blogOriginUrlFor(requestUrl);
+
+    if (blogOriginUrl) {
+      const init = {
+        method: request.method,
+        headers: new Headers(request.headers),
+        redirect: "manual",
+      };
+      init.headers.set("host", BLOG_HOST);
+      if (request.method !== "GET" && request.method !== "HEAD") {
+        init.body = request.body;
+      }
+
+      const response = await fetch(new Request(blogOriginUrl, init));
+      const headers = new Headers(response.headers);
+      headers.set("x-wns-blog-origin", "github-pages");
+
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
+    }
+
     const originPath = originPathFor(requestUrl);
 
     if (!originPath) {

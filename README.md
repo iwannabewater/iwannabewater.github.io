@@ -52,8 +52,9 @@ The game channel is a catalog, not a one-game special case. `NiniWithYuan` is th
 
 The generated site still builds internal `/channels/<slug>/` pages. Most of
 those pages are intended as Cloudflare Worker origin paths for the public
-channel subdomains. The blog channel is different: it is served by the
-dedicated `iwannabewater/blog` GitHub Pages site at `blog.whynotsleep.cc`.
+channel subdomains. The blog channel is different: the Worker proxies
+`blog.whynotsleep.cc` to the dedicated `iwannabewater/blog` GitHub Pages site
+instead of serving `/channels/blog/`.
 
 ## Visual System
 
@@ -118,14 +119,12 @@ www.whynotsleep.cc CNAME iwannabewater.github.io
 ```
 
 No wildcard records are needed. Create only the explicit channel subdomains
-listed below when the Cloudflare Worker router is deployed. Keep
-`blog.whynotsleep.cc` as a GitHub Pages custom domain for
-`iwannabewater/blog`, not as a Worker-routed channel.
+listed below when the Cloudflare Worker router is deployed.
 
 For `blog`:
 
 ```text
-blog.whynotsleep.cc CNAME iwannabewater.github.io
+blog.whynotsleep.cc -> Worker route -> iwannabewater/blog GitHub Pages origin
 ```
 
 `https://game.whynotsleep.cc/niniwithyuan/` is the public game URL. The Worker maps it to the existing GitHub Pages project path `/NiniWithYuan/` so the browser stays inside the game subdomain while the game assets keep working.
@@ -137,7 +136,7 @@ The intended channel behavior is:
 ```text
 https://game.whynotsleep.cc/       -> serves /channels/game/
 https://game.whynotsleep.cc/niniwithyuan/ -> serves /NiniWithYuan/
-https://blog.whynotsleep.cc/       -> served by iwannabewater/blog GitHub Pages
+https://blog.whynotsleep.cc/       -> proxies iwannabewater/blog GitHub Pages
 https://project.whynotsleep.cc/    -> serves /channels/project/
 https://manuscript.whynotsleep.cc/ -> serves /channels/manuscript/
 https://design.whynotsleep.cc/     -> serves /channels/design/
