@@ -50,7 +50,10 @@ Local planning files, assistant workspaces, scratch output, test output, and gen
 
 The game channel is a catalog, not a one-game special case. `NiniWithYuan` is the first playable entry and links to both the live route and source repository.
 
-The generated site still builds internal `/channels/<slug>/` pages. Those pages are intended as Cloudflare Worker origin paths for the public channel subdomains.
+The generated site still builds internal `/channels/<slug>/` pages. Most of
+those pages are intended as Cloudflare Worker origin paths for the public
+channel subdomains. The blog channel is different: it is served by the
+dedicated `iwannabewater/blog` GitHub Pages site at `blog.whynotsleep.cc`.
 
 ## Visual System
 
@@ -114,7 +117,16 @@ For `www`:
 www.whynotsleep.cc CNAME iwannabewater.github.io
 ```
 
-No wildcard records are needed. Create only the explicit channel subdomains listed below when the Cloudflare Worker router is deployed.
+No wildcard records are needed. Create only the explicit channel subdomains
+listed below when the Cloudflare Worker router is deployed. Keep
+`blog.whynotsleep.cc` as a GitHub Pages custom domain for
+`iwannabewater/blog`, not as a Worker-routed channel.
+
+For `blog`:
+
+```text
+blog.whynotsleep.cc CNAME iwannabewater.github.io
+```
 
 `https://game.whynotsleep.cc/niniwithyuan/` is the public game URL. The Worker maps it to the existing GitHub Pages project path `/NiniWithYuan/` so the browser stays inside the game subdomain while the game assets keep working.
 
@@ -125,7 +137,7 @@ The intended channel behavior is:
 ```text
 https://game.whynotsleep.cc/       -> serves /channels/game/
 https://game.whynotsleep.cc/niniwithyuan/ -> serves /NiniWithYuan/
-https://blog.whynotsleep.cc/       -> serves /channels/blog/
+https://blog.whynotsleep.cc/       -> served by iwannabewater/blog GitHub Pages
 https://project.whynotsleep.cc/    -> serves /channels/project/
 https://manuscript.whynotsleep.cc/ -> serves /channels/manuscript/
 https://design.whynotsleep.cc/     -> serves /channels/design/
@@ -133,7 +145,9 @@ https://note.whynotsleep.cc/       -> serves /channels/note/
 https://life.whynotsleep.cc/       -> serves /channels/life/
 ```
 
-Because GitHub Pages only has `whynotsleep.cc` configured as the repository custom domain, the clean subdomain URLs should be handled at Cloudflare. Recommended setup:
+Because this repository only has `whynotsleep.cc` configured as its custom
+domain, the remaining clean channel subdomain URLs should be handled at
+Cloudflare. Recommended setup:
 
 1. Add proxied DNS records for each channel subdomain. For this originless Worker setup, each channel can use a reserved placeholder address such as `192.0.2.1`; the important part is that the records are proxied by Cloudflare.
 2. Deploy `cloudflare/channel-router.js` with `cloudflare/wrangler.channel-router.toml`.

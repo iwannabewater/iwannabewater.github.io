@@ -4,7 +4,6 @@ import { originPathFor } from "./channel-router.js";
 
 test("channel router maps channel roots to generated origin paths", () => {
   assert.equal(originPathFor(new URL("https://game.whynotsleep.cc/")), "/channels/game/");
-  assert.equal(originPathFor(new URL("https://blog.whynotsleep.cc/")), "/channels/blog/");
 });
 
 test("channel router preserves nested channel paths and query handling stays outside mapping", () => {
@@ -27,4 +26,5 @@ test("channel router maps lowercase game app aliases to their GitHub Pages proje
 
 test("channel router rejects unknown hosts", () => {
   assert.equal(originPathFor(new URL("https://unknown.whynotsleep.cc/")), null);
+  assert.equal(originPathFor(new URL("https://blog.whynotsleep.cc/")), null);
 });

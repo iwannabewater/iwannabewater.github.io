@@ -2,7 +2,7 @@ const statusCopy = {
   Preparing: "being shaped",
   Reserved: "reserved route",
   Indexing: "index in progress",
-  Live: "playable now",
+  Live: "available now",
 };
 
 const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="18" fill="#17231f"/><path d="M20 43c9.8 4.5 20.9 1.7 26.5-6.8" fill="none" stroke="#f1eee6" stroke-width="3.2" stroke-linecap="round"/><path d="M30 14c-5.6 7.8-3.6 18.9 4.2 24.5 4.5 3.2 10.3 4 15.4 2.1A20.8 20.8 0 1 1 30 14Z" fill="#f1eee6"/><path d="M45 14l1.9 4.1 4.1 1.9-4.1 1.9L45 26l-1.9-4.1L39 20l4.1-1.9L45 14Z" fill="#d6a55d"/><circle cx="18" cy="20" r="2.4" fill="#7b8d77"/></svg>`;

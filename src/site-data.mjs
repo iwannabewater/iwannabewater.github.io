@@ -51,9 +51,9 @@ export const channels = [
     title: "Technical Blog",
     host: "blog.whynotsleep.cc",
     path: "/channels/blog/",
-    status: "Preparing",
+    status: "Live",
     summary:
-      "Long-form technical essays for engineering narratives, AI systems notes, implementation diaries, and research-adjacent learning records.",
+      "Long-form technical essays, AI systems notes, implementation diaries, and research-adjacent learning records served from the dedicated Atelier Log blog.",
     planned: [
       "Architecture notes from real projects",
       "AI systems reading and implementation logs",

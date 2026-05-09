@@ -1,5 +1,4 @@
 const CHANNEL_PATHS = {
-  "blog.whynotsleep.cc": "/channels/blog/",
   "game.whynotsleep.cc": "/channels/game/",
   "project.whynotsleep.cc": "/channels/project/",
   "manuscript.whynotsleep.cc": "/channels/manuscript/",
