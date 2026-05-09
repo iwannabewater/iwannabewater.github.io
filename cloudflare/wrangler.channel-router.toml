@@ -3,6 +3,10 @@ main = "channel-router.js"
 compatibility_date = "2026-05-07"
 
 routes = [
+  { pattern = "whynotsleep.cc/NiniWithYuan", zone_name = "whynotsleep.cc" },
+  { pattern = "whynotsleep.cc/NiniWithYuan/*", zone_name = "whynotsleep.cc" },
+  { pattern = "whynotsleep.cc/niniwithyuan", zone_name = "whynotsleep.cc" },
+  { pattern = "whynotsleep.cc/niniwithyuan/*", zone_name = "whynotsleep.cc" },
   { pattern = "blog.whynotsleep.cc/*", zone_name = "whynotsleep.cc" },
   { pattern = "game.whynotsleep.cc/*", zone_name = "whynotsleep.cc" },
   { pattern = "project.whynotsleep.cc/*", zone_name = "whynotsleep.cc" },

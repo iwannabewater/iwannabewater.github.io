@@ -49,6 +49,8 @@ Local planning files, assistant workspaces, scratch output, test output, and gen
 | `https://game.whynotsleep.cc/niniwithyuan/` | Live game route for `iwannabewater/NiniWithYuan` |
 
 The game channel is a catalog, not a one-game special case. `NiniWithYuan` is the first playable entry and links to both the live route and source repository.
+Legacy project paths such as `https://whynotsleep.cc/NiniWithYuan/` redirect
+to the canonical game subdomain route.
 
 The generated site still builds internal `/channels/<slug>/` pages. Most of
 those pages are intended as Cloudflare Worker origin paths for the public
@@ -136,6 +138,7 @@ The intended channel behavior is:
 ```text
 https://game.whynotsleep.cc/       -> serves /channels/game/
 https://game.whynotsleep.cc/niniwithyuan/ -> serves /NiniWithYuan/
+https://whynotsleep.cc/NiniWithYuan/ -> redirects to https://game.whynotsleep.cc/niniwithyuan/
 https://blog.whynotsleep.cc/       -> proxies iwannabewater/blog GitHub Pages
 https://project.whynotsleep.cc/    -> serves /channels/project/
 https://manuscript.whynotsleep.cc/ -> serves /channels/manuscript/

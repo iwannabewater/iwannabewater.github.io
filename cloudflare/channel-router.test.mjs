@@ -1,6 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { blogOriginUrlFor, originPathFor } from "./channel-router.js";
+import {
+  blogOriginUrlFor,
+  legacyGameRedirectUrlFor,
+  originPathFor,
+} from "./channel-router.js";
 
 test("channel router maps channel roots to generated origin paths", () => {
   assert.equal(originPathFor(new URL("https://game.whynotsleep.cc/")), "/channels/game/");
@@ -16,6 +20,26 @@ test("channel router maps blog host to the dedicated GitHub Pages origin", () =>
     blogOriginUrlFor(new URL("https://blog.whynotsleep.cc/_astro/app.js")),
     "http://blog.whynotsleep.cc/_astro/app.js",
   );
+});
+
+test("channel router redirects legacy game URLs to the canonical game subdomain", () => {
+  assert.equal(
+    legacyGameRedirectUrlFor(new URL("https://whynotsleep.cc/NiniWithYuan/")),
+    "https://game.whynotsleep.cc/niniwithyuan/",
+  );
+  assert.equal(
+    legacyGameRedirectUrlFor(new URL("https://whynotsleep.cc/NiniWithYuan/assets/app.js?v=1")),
+    "https://game.whynotsleep.cc/niniwithyuan/assets/app.js?v=1",
+  );
+  assert.equal(
+    legacyGameRedirectUrlFor(new URL("https://whynotsleep.cc/niniwithyuan")),
+    "https://game.whynotsleep.cc/niniwithyuan/",
+  );
+  assert.equal(
+    legacyGameRedirectUrlFor(new URL("https://game.whynotsleep.cc/NiniWithYuan/")),
+    "https://game.whynotsleep.cc/niniwithyuan/",
+  );
+  assert.equal(legacyGameRedirectUrlFor(new URL("https://game.whynotsleep.cc/niniwithyuan/")), null);
 });
 
 test("channel router preserves nested channel paths and query handling stays outside mapping", () => {
@@ -40,4 +64,5 @@ test("channel router rejects unknown hosts", () => {
   assert.equal(originPathFor(new URL("https://unknown.whynotsleep.cc/")), null);
   assert.equal(originPathFor(new URL("https://blog.whynotsleep.cc/")), null);
   assert.equal(blogOriginUrlFor(new URL("https://game.whynotsleep.cc/")), null);
+  assert.equal(legacyGameRedirectUrlFor(new URL("https://whynotsleep.cc/projects/")), null);
 });

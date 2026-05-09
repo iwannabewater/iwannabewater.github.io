@@ -1,6 +1,9 @@
 const BLOG_HOST = "blog.whynotsleep.cc";
 const BLOG_PAGES_ORIGIN = `http://${BLOG_HOST}`;
 const BLOG_RESOLVE_OVERRIDE = "www.whynotsleep.cc";
+const PRIMARY_HOST = "whynotsleep.cc";
+const GAME_HOST = "game.whynotsleep.cc";
+const GAME_CANONICAL_BASE = `https://${GAME_HOST}/niniwithyuan/`;
 
 const CHANNEL_PATHS = {
   "game.whynotsleep.cc": "/channels/game/",
@@ -17,6 +20,29 @@ const GAME_APP_ALIASES = {
   "/niniwithyuan": "/NiniWithYuan/",
 };
 
+export function legacyGameRedirectUrlFor(requestUrl) {
+  if (requestUrl.hostname === PRIMARY_HOST) {
+    const match = requestUrl.pathname.match(/^\/NiniWithYuan(?:\/(.*))?$/i);
+    if (!match) return null;
+
+    const rest = match[1] ?? "";
+    const redirectUrl = new URL(rest ? rest : "", GAME_CANONICAL_BASE);
+    redirectUrl.search = requestUrl.search;
+    return redirectUrl.toString();
+  }
+
+  if (
+    requestUrl.hostname === GAME_HOST &&
+    /^\/NiniWithYuan\/?$/.test(requestUrl.pathname)
+  ) {
+    const redirectUrl = new URL(GAME_CANONICAL_BASE);
+    redirectUrl.search = requestUrl.search;
+    return redirectUrl.toString();
+  }
+
+  return null;
+}
+
 export function blogOriginUrlFor(requestUrl) {
   if (requestUrl.hostname !== BLOG_HOST) return null;
 
@@ -26,7 +52,7 @@ export function blogOriginUrlFor(requestUrl) {
 }
 
 function aliasPathFor(requestUrl) {
-  if (requestUrl.hostname !== "game.whynotsleep.cc") return null;
+  if (requestUrl.hostname !== GAME_HOST) return null;
 
   const pathname = requestUrl.pathname.replace(/\/+$/, "") || "/";
   for (const [publicPrefix, originPrefix] of Object.entries(GAME_APP_ALIASES)) {
@@ -60,6 +86,12 @@ export function originPathFor(requestUrl) {
 export default {
   async fetch(request) {
     const requestUrl = new URL(request.url);
+    const legacyGameRedirectUrl = legacyGameRedirectUrlFor(requestUrl);
+
+    if (legacyGameRedirectUrl) {
+      return Response.redirect(legacyGameRedirectUrl, 301);
+    }
+
     const blogOriginUrl = blogOriginUrlFor(requestUrl);
 
     if (blogOriginUrl) {
