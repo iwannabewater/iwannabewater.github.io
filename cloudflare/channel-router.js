@@ -1,5 +1,6 @@
 const BLOG_HOST = "blog.whynotsleep.cc";
-const BLOG_PAGES_ORIGIN = "http://iwannabewater.github.io";
+const BLOG_PAGES_ORIGIN = `http://${BLOG_HOST}`;
+const BLOG_RESOLVE_OVERRIDE = "www.whynotsleep.cc";
 
 const CHANNEL_PATHS = {
   "game.whynotsleep.cc": "/channels/game/",
@@ -72,7 +73,9 @@ export default {
         init.body = request.body;
       }
 
-      const response = await fetch(new Request(blogOriginUrl, init));
+      const response = await fetch(new Request(blogOriginUrl, init), {
+        cf: { resolveOverride: BLOG_RESOLVE_OVERRIDE },
+      });
       const headers = new Headers(response.headers);
       headers.set("x-wns-blog-origin", "github-pages");
 

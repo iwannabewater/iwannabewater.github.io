@@ -124,7 +124,7 @@ listed below when the Cloudflare Worker router is deployed.
 For `blog`:
 
 ```text
-blog.whynotsleep.cc -> Worker route -> iwannabewater/blog GitHub Pages origin
+blog.whynotsleep.cc -> Worker route -> GitHub Pages origin via www.whynotsleep.cc
 ```
 
 `https://game.whynotsleep.cc/niniwithyuan/` is the public game URL. The Worker maps it to the existing GitHub Pages project path `/NiniWithYuan/` so the browser stays inside the game subdomain while the game assets keep working.

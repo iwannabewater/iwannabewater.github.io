@@ -7,14 +7,14 @@ test("channel router maps channel roots to generated origin paths", () => {
 });
 
 test("channel router maps blog host to the dedicated GitHub Pages origin", () => {
-  assert.equal(blogOriginUrlFor(new URL("https://blog.whynotsleep.cc/")), "http://iwannabewater.github.io/");
+  assert.equal(blogOriginUrlFor(new URL("https://blog.whynotsleep.cc/")), "http://blog.whynotsleep.cc/");
   assert.equal(
     blogOriginUrlFor(new URL("https://blog.whynotsleep.cc/posts/?q=astro")),
-    "http://iwannabewater.github.io/posts/?q=astro",
+    "http://blog.whynotsleep.cc/posts/?q=astro",
   );
   assert.equal(
     blogOriginUrlFor(new URL("https://blog.whynotsleep.cc/_astro/app.js")),
-    "http://iwannabewater.github.io/_astro/app.js",
+    "http://blog.whynotsleep.cc/_astro/app.js",
   );
 });
 
