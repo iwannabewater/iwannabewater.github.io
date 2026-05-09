@@ -4,6 +4,13 @@ const BLOG_RESOLVE_OVERRIDE = "www.whynotsleep.cc";
 const PRIMARY_HOST = "whynotsleep.cc";
 const GAME_HOST = "game.whynotsleep.cc";
 const GAME_CANONICAL_BASE = `https://${GAME_HOST}/niniwithyuan/`;
+const BLOG_REDIRECT_HOSTS = new Set([
+  BLOG_HOST,
+  PRIMARY_HOST,
+  `www.${PRIMARY_HOST}`,
+  "iwannabewater.github.io",
+]);
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
 const CHANNEL_PATHS = {
   "game.whynotsleep.cc": "/channels/game/",
@@ -51,6 +58,54 @@ export function blogOriginUrlFor(requestUrl) {
   return originUrl.toString();
 }
 
+function forwardedSchemeFor(headers) {
+  const cfVisitor = headers.get("cf-visitor");
+  if (cfVisitor) {
+    try {
+      const visitor = JSON.parse(cfVisitor);
+      if (typeof visitor.scheme === "string") return visitor.scheme;
+    } catch {
+      // Fall through to the forwarded-proto header when Cloudflare omits JSON.
+    }
+  }
+
+  return headers.get("x-forwarded-proto");
+}
+
+export function blogHttpsRedirectUrlFor(requestUrl, headers = new Headers()) {
+  const scheme = forwardedSchemeFor(headers) ?? requestUrl.protocol.replace(/:$/, "");
+  if (requestUrl.hostname !== BLOG_HOST || scheme === "https") {
+    return null;
+  }
+
+  const redirectUrl = new URL(requestUrl.toString());
+  redirectUrl.protocol = "https:";
+  return redirectUrl.toString();
+}
+
+function canonicalBlogPath(pathname) {
+  return pathname.replace(/^\/blog(?=\/|$)/, "") || "/";
+}
+
+export function canonicalBlogRedirectLocationFor(location, requestUrl) {
+  if (!location) return null;
+
+  let locationUrl;
+  try {
+    locationUrl = new URL(location, requestUrl);
+  } catch {
+    return null;
+  }
+
+  if (!BLOG_REDIRECT_HOSTS.has(locationUrl.hostname)) return null;
+
+  const redirectUrl = new URL(`https://${BLOG_HOST}`);
+  redirectUrl.pathname = canonicalBlogPath(locationUrl.pathname);
+  redirectUrl.search = locationUrl.search;
+  redirectUrl.hash = locationUrl.hash;
+  return redirectUrl.toString();
+}
+
 function aliasPathFor(requestUrl) {
   if (requestUrl.hostname !== GAME_HOST) return null;
 
@@ -95,6 +150,11 @@ export default {
     const blogOriginUrl = blogOriginUrlFor(requestUrl);
 
     if (blogOriginUrl) {
+      const blogHttpsRedirectUrl = blogHttpsRedirectUrlFor(requestUrl, request.headers);
+      if (blogHttpsRedirectUrl) {
+        return Response.redirect(blogHttpsRedirectUrl, 301);
+      }
+
       const init = {
         method: request.method,
         headers: new Headers(request.headers),
@@ -110,6 +170,13 @@ export default {
       });
       const headers = new Headers(response.headers);
       headers.set("x-wns-blog-origin", "github-pages");
+      if (REDIRECT_STATUSES.has(response.status)) {
+        const redirectLocation = canonicalBlogRedirectLocationFor(
+          headers.get("location"),
+          requestUrl,
+        );
+        if (redirectLocation) headers.set("location", redirectLocation);
+      }
 
       return new Response(response.body, {
         status: response.status,
